@@ -1,0 +1,26 @@
+{
+  "name": "html4express",
+  "version": "0.0.1",
+  "description": "HTML Loader for Express",
+  "main": "loadhtml",
+  "scripts": {
+    "test": "node loadhtmltest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/julianfrank/html4express.git"
+  },
+  "keywords": [
+    "express",
+    "html"
+  ],
+  "author": "Julian Frank",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/julianfrank/html4express/issues"
+  },
+  "homepage": "https://github.com/julianfrank/html4express#readme",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}
