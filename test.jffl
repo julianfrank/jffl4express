@@ -1,0 +1,14 @@
+{
+    "html": {
+        "std": "teststd.html",
+        "head": [
+            "testhead.html"
+        ],
+        "body": [
+            "testbody.html"
+        ]
+    },
+    "scripts": [
+        "testjs.js"
+    ]
+}

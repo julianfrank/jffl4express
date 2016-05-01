@@ -1,25 +1,27 @@
 {
-  "name": "html4express",
-  "version": "0.0.1",
-  "description": "HTML Loader for Express",
-  "main": "loadhtml",
+  "name": "jffl4express",
+  "version": "1.0.0",
+  "description": "Julian Frank's fluid HTML Loader for Express",
+  "main": "jffl.js",
   "scripts": {
-    "test": "node loadhtmltest"
+    "test": "node testjffl"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/julianfrank/html4express.git"
+    "url": "git+https://github.com/julianfrank/jffl4express.git"
   },
   "keywords": [
-    "express",
-    "html"
+    "jffl",
+    "Fluid",
+    "HTML",
+    "Express"
   ],
   "author": "Julian Frank",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/julianfrank/html4express/issues"
+    "url": "https://github.com/julianfrank/jffl4express/issues"
   },
-  "homepage": "https://github.com/julianfrank/html4express#readme",
+  "homepage": "https://github.com/julianfrank/jffl4express#readme",
   "dependencies": {
     "express": "^4.13.4"
   }
