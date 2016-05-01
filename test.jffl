@@ -8,7 +8,10 @@
             "testbody.html"
         ]
     },
-    "scripts": [
+    "js": [
         "testjs.js"
+    ],
+    "css":[
+        "testcss.css"
     ]
 }
