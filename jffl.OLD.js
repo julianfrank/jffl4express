@@ -32,69 +32,53 @@ function loadjffl(filePath, options, callback) {//std pattern used by / provided
             let rendered = "<pre>" + JSON.stringify(config) + "<br>" + JSON.stringify(parsedOptions) + "</pre>" + "<br>"
 
             let loadFiles = (filesArray) => {
-                console.log('Going to read Array ->' + filesArray)
                 return new Promise((resolve, reject) => {
-                    let readText = ""
+                    let readText = "", readComplete = false
                     Object.keys(filesArray).map((val, ind) => {
+                        console.log('readText:', typeof filesArray[val], filesArray[val])
                         fs.readFile(filesArray[val], (err, content) => {
                             if (err) {
-                                console.error('Error Reading File ' + filesArray[val] + ' Error: ' + err)
                                 reject(err)
                             } else {
+                                console.log('readText:', typeof content, content.toString())
                                 readText += content.toString()
-                                if (ind === (filesArray.length - 1)) { resolve(readText) }
+                                if (ind === filesArray.length) { readComplete = true }
                             }
                         })
                     })
+                    if (readComplete) { resolve(readText) }
                 })
             }
 
             let loadSTD = new Promise((resolve, reject) => {
                 if (config.html.std) {
-                    loadFiles([config.html.std]).then((fileText) => { resolve(fileText) })
-                } else {
-                    reject('<!doctype html>')
+                    fs.readFile(config.html.std, (err, stdText) => {
+                        if (err) {
+                            reject(err)
+                        } else {
+                            resolve(stdText.toString())
+                        }
+                    })
                 }
             })
 
             let loadHEAD = new Promise((resolve, reject) => {
-                let headText = '<HEAD>'
-                if (config.html.title) { headText += '<TITLE>' + config.html.title + '</TITLE>' }
+                let headText = '<HEAD><TITLE>' + config.html.title + '</TITLE>'
                 if (config.html.head) {
                     loadFiles(config.html.head).then((filesText) => {
-                        loadFiles(config.js)
-                            .then((jsText) => { headText += jsText }, (err) => { headText += err })
-                            .then(loadFiles(config.css)
-                                .then((cssText) => { headText += cssText }, (err) => { headText += err }))
                         headText += filesText + '</HEAD>'
+                        console.log('headText:', typeof headText, headText)
                         resolve(headText)
-                    }, (err) => { reject(headText += '</HEAD>') })
-                } else {
-                    reject(headText += '</HEAD>')
-                }
-            })
-
-            let loadBODY = new Promise((resolve, reject) => {
-                let bodyText = '<BODY>'
-                if (config.html.body) {
-                    loadFiles(config.html.body).then((filesText) => {
-                        bodyText += filesText + '</BODY>'
-                        resolve(bodyText)
-                    }, (err) => {
-                        reject(bodyText += '</BODY>')
                     })
-                } else {
-                    reject(bodyText += '</BODY>')
                 }
             })
 
-            Promise.all([loadSTD, loadHEAD, loadBODY]).then((texts) => {
-                rendered = texts[0] + texts[1] + texts[2] + rendered
+            Promise.all([loadSTD, loadHEAD]).then((texts) => {
+                rendered = texts[0] + texts[1] + rendered
                 console.log('Rendered:', typeof rendered, rendered.toString())
                 return callback(null, rendered)
             }, (err) => {
-                console.error('Error: ' + err)
-                return callback(null, rendered += err)
+                return callback(err, rendered += err)
             })
 
         }

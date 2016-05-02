@@ -1,11 +1,12 @@
 {
     "html": {
         "std": "teststd.html",
+        "title":"Test Title",
         "head": [
-            "testhead.html"
+            "testhead1.html","testhead2.html"
         ],
         "body": [
-            "testbody.html"
+            "testbody1.html","testbody2.html"
         ]
     },
     "js": [
