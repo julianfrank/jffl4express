@@ -10,9 +10,9 @@
         ]
     },
     "js": [
-        "testjs.js"
+        "testjs1.js","testjs2.js"
     ],
     "css":[
-        "testcss.css"
+        "testcss1.css","testcss2.css"
     ]
 }

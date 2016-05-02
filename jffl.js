@@ -21,7 +21,26 @@ function loadjffl(filePath, options, callback) {//std pattern used by / provided
     const params = "{ FilePath: " + filePath + ", Options: " + inspect(options) + " }"//Logging purpose only
     let parsedOptions = {},//Holder for Parsed Options
         returnHTML = "",//Holder for final HTML document being constucted,
-        config = {}
+        config = {},//Holder for configuration loaded from jffl file
+        runParams = ""//holder to Runtime Paramters provided as part of Options to be injected
+
+    //Obtain new variables to be injected
+    Object.keys(options).map((val) => {
+        switch (val) {
+            case 'settings': break
+            case '_locals': break
+            case 'cache': break
+            default: parsedOptions[val] = options[val]
+        }
+    })
+    //Inject Parsed Options into HTML Document
+    Object.keys(parsedOptions).map((val) => {
+        switch (typeof parsedOptions[val]) {
+            case 'string': runParams += "<script>var " + val + "='" + parsedOptions[val] + "'</Script>"; break
+            case 'number': runParams += "<script>var " + val + "=" + parsedOptions[val] + "</Script>"; break
+            default: runParams += "<script>var " + val + "='" + typeof parsedOptions[val] + "'</Script>"
+        }
+    })
 
     //Read the File provided
     fs.readFile(filePath, (err, content) => {
@@ -29,9 +48,8 @@ function loadjffl(filePath, options, callback) {//std pattern used by / provided
             return callback(new Error(err.message))
         } else {
             config = JSON.parse(content.toString())
-            let rendered = "<pre>" + JSON.stringify(config) + "<br>" + JSON.stringify(parsedOptions) + "</pre>" + "<br>"
 
-            let loadFiles = (filesArray) => {
+            function loadFiles(filesArray) {
                 console.log('Going to read Array ->' + filesArray)
                 return new Promise((resolve, reject) => {
                     let readText = ""
@@ -61,14 +79,25 @@ function loadjffl(filePath, options, callback) {//std pattern used by / provided
                 let headText = '<HEAD>'
                 if (config.html.title) { headText += '<TITLE>' + config.html.title + '</TITLE>' }
                 if (config.html.head) {
-                    loadFiles(config.html.head).then((filesText) => {
-                        loadFiles(config.js)
-                            .then((jsText) => { headText += jsText }, (err) => { headText += err })
-                            .then(loadFiles(config.css)
-                                .then((cssText) => { headText += cssText }, (err) => { headText += err }))
-                        headText += filesText + '</HEAD>'
-                        resolve(headText)
-                    }, (err) => { reject(headText += '</HEAD>') })
+                    loadFiles(config.html.head)
+                        .then((filesText) => {
+                            loadFiles(config.js)
+                                .then((jsText) => {
+                                    if (runParams) {
+                                        headText = headText + runParams + jsText
+                                    } else {
+                                        headText += jsText
+                                    }
+                                    loadFiles(config.css)
+                                        .then((cssText) => {
+                                            headText = headText
+                                                + '<style>' + cssText + '</style>'
+                                                + filesText
+                                                + '</HEAD>'
+                                            resolve(headText)
+                                        }, (err) => { reject(headText += err) })
+                                }, (err) => { reject(headText += err) })
+                        }, (err) => { reject(headText += '</HEAD>') })
                 } else {
                     reject(headText += '</HEAD>')
                 }
@@ -78,7 +107,7 @@ function loadjffl(filePath, options, callback) {//std pattern used by / provided
                 let bodyText = '<BODY>'
                 if (config.html.body) {
                     loadFiles(config.html.body).then((filesText) => {
-                        bodyText += filesText + '</BODY>'
+                        bodyText =bodyText+ filesText + '</BODY>'
                         resolve(bodyText)
                     }, (err) => {
                         reject(bodyText += '</BODY>')
@@ -89,7 +118,7 @@ function loadjffl(filePath, options, callback) {//std pattern used by / provided
             })
 
             Promise.all([loadSTD, loadHEAD, loadBODY]).then((texts) => {
-                rendered = texts[0] + texts[1] + texts[2] + rendered
+                let rendered = texts[0] + texts[1] + texts[2]
                 console.log('Rendered:', typeof rendered, rendered.toString())
                 return callback(null, rendered)
             }, (err) => {
@@ -99,27 +128,5 @@ function loadjffl(filePath, options, callback) {//std pattern used by / provided
 
         }
     })
-
-    //Obtain new variables to be injected
-    Object.keys(options).map((val) => {
-        switch (val) {
-            case 'settings': break
-            case '_locals': break
-            case 'cache': break
-            default: parsedOptions[val] = options[val]
-        }
-    })
-
-    //Inject Parsed Options into HTML Document
-    Object.keys(parsedOptions).map((val) => {
-        switch (typeof parsedOptions[val]) {
-            case 'string': returnHTML += "<script>var " + val + "='" + parsedOptions[val] + "'</Script>"; break
-            case 'number': returnHTML += "<script>var " + val + "=" + parsedOptions[val] + "</Script>"; break
-            default: returnHTML += "<script>var " + val + "='" + typeof parsedOptions[val] + "'</Script>"
-        }
-        returnHTML += "<label value=" + parsedOptions[val] + "></label>"
-    })
-
-
 }
 module.exports = { loadjffl }
