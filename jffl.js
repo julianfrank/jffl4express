@@ -15,9 +15,9 @@ Add this into express using this statement =>
 In your app render using the following command inside the middleware
         res.render(<your jffl>,options,callback with parameters (error,rendered html content))
 
-This sample gets called when any '.jfml' file is rendered Parameters are called directly by express, so no coding needed*/
+This sample gets called when any '.jffl' file is rendered Parameters are called directly by express, so no coding needed*/
 
-function loadjffl(filePath, options, callback) {//std pattern used by / provided by express
+exports.loadjffl = (filePath, options, callback) => {//std pattern used by / provided by express
     const params = "{ FilePath: " + filePath + ", Options: " + inspect(options) + " }"//Logging purpose only
     let parsedOptions = {},//Holder for Parsed Options
         returnHTML = "",//Holder for final HTML document being constucted,
@@ -107,8 +107,7 @@ function loadjffl(filePath, options, callback) {//std pattern used by / provided
                 let bodyText = '<BODY>'
                 if (config.html.body) {
                     loadFiles(config.html.body).then((filesText) => {
-                        bodyText =bodyText+ filesText + '</BODY>'
-                        resolve(bodyText)
+                        resolve(bodyText + filesText + '</BODY>')
                     }, (err) => {
                         reject(bodyText += '</BODY>')
                     })
@@ -123,10 +122,9 @@ function loadjffl(filePath, options, callback) {//std pattern used by / provided
                 return callback(null, rendered)
             }, (err) => {
                 console.error('Error: ' + err)
-                return callback(null, rendered += err)
+                return callback(err, rendered += err)
             })
 
         }
     })
 }
-module.exports = { loadjffl }
