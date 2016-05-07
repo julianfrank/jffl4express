@@ -11,7 +11,7 @@ app.use('/', (req, res) => {
 
 app.listen(80, (err) => {
     if (err) {
-        console.log('Error while listen' + err)
+        console.log('Error while listen ' + err)
     } else {
         console.log('listening in 80')
     }
