@@ -20,7 +20,7 @@ This sample gets called when any '.jffl' file is rendered Parameters are called 
 
 exports.loadjffl = (filePath, options, callback) => {//std pattern used by / provided by express
     const params = "{ FilePath: " + filePath + ", Options: " + inspect(options) + ", LocalDir " + path.dirname(filePath) + " }"//Logging purpose only
-    console.info("Going to use Parameters as below:\n" + params)
+    //console.info("Going to use Parameters as below:\n" + params)
     const localPath = path.dirname(filePath)
 
     let parsedOptions = {},//Holder for Parsed Options
@@ -54,13 +54,13 @@ exports.loadjffl = (filePath, options, callback) => {//std pattern used by / pro
             config = JSON.parse(content.toString())
 
             function loadFiles(filesArray) {
-                console.info('Going to read Array ->' + filesArray)
+                //console.info('Going to read Array ->' + filesArray)
                 return new Promise((resolve, reject) => {
                     let readText = ""
                     Object.keys(filesArray).map((val, ind) => {
 
                         let fullPath = path.format({ dir: localPath, base: filesArray[val] })
-                        console.info('Going to read File ->' + fullPath)
+                        //console.info('Going to read File ->' + fullPath)
                         fs.readFile(fullPath, (err, content) => {
                             if (err) {
                                 console.error('Error Reading File ' + filesArray[val] + ' Error: ' + err)
@@ -126,7 +126,7 @@ exports.loadjffl = (filePath, options, callback) => {//std pattern used by / pro
 
             Promise.all([loadSTD, loadHEAD, loadBODY]).then((texts) => {
                 let rendered = texts[0] + texts[1] + texts[2]
-                console.log('Rendered:', typeof rendered, rendered.toString())
+                //console.log('Rendered:', typeof rendered, rendered.toString())
                 return callback(null, rendered)
             }, (err) => {
                 console.error('Error: ' + err)
