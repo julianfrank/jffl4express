@@ -1,7 +1,7 @@
 {
   "name": "jffl4express",
-  "version": "0.0.12",
-  "description": "Julian Frank's Fluid html Loader for Express",
+  "version": "0.0.13",
+  "description": "Fluid Fragmented HTML Loader for Express by Julian Frank",
   "scripts": {
     "test": "node testjffl/testjffl"
   },

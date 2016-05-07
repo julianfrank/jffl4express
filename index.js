@@ -19,7 +19,7 @@ In your app render using the following command inside the middleware
 This sample gets called when any '.jffl' file is rendered Parameters are called directly by express, so no coding needed*/
 
 exports.loadjffl = (filePath, options, callback) => {//std pattern used by / provided by express
-    const params = "{ FilePath: " + filePath + ", Options: " + inspect(options) + ", LocalDir " + path.dirname(filePath) + " }"//Logging purpose only
+    //const params = "{ FilePath: " + filePath + ", Options: " + inspect(options) + ", LocalDir " + path.dirname(filePath) + " }"//Logging purpose only
     //console.info("Going to use Parameters as below:\n" + params)
     const localPath = path.dirname(filePath)
 
@@ -53,7 +53,9 @@ exports.loadjffl = (filePath, options, callback) => {//std pattern used by / pro
         } else {
             config = JSON.parse(content.toString())
 
-            function loadFiles(filesArray) {
+            //Helper Function that takes a Array of files, reads them and returns the content as a single String
+            //When only a single file needs to be loaded, push it into a Array when feeding
+            const loadFiles = (filesArray) => {
                 //console.info('Going to read Array ->' + filesArray)
                 return new Promise((resolve, reject) => {
                     let readText = ""
