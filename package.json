@@ -15,12 +15,6 @@
     "HTML",
     "Express"
   ],
-  "files": [
-    "LICENSE",
-    "Readme.md",
-    "index.js",
-    "testjffl/"
-  ],
   "main": "index.js",
   "author": "Julian Frank <jfempire@yahoo.co.uk> (https://lab4jf.in)",
   "license": "MIT",
