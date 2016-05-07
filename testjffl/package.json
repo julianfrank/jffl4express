@@ -1,0 +1,19 @@
+{
+  "name": "testjffl",
+  "version": "0.1.0",
+  "description": "test the jffl loader",
+  "main": "testjffl.js",
+  "scripts": {
+    "test": "node testjffl"
+  },
+  "keywords": [
+    "test",
+    "jffl"
+  ],
+  "author": "Julian Frank",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.4",
+    "jffl4express": "0.0.9"
+  }
+}

@@ -1,7 +1,7 @@
 'use strict'
 const app = require('express')()
-const loadJFFL = require('../index.js').loadjffl
-app.set('views', './testjffl')
+const loadJFFL = require('jffl4express').loadjffl
+app.set('views', '../testjffl')
 app.set('view engine', 'jffl')
 app.engine('jffl', loadJFFL)
 
