@@ -1,6 +1,6 @@
 {
   "name": "jffl4express",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Julian Frank's Fluid html Loader for Express",
   "scripts": {
     "test": "node testjffl/testjffl"
@@ -22,7 +22,7 @@
     "lib/",
     "testjffl/"
   ],
-  "main":"bin/index.js",
+  "main":"index.js",
   "author": "Julian Frank <jfempire@yahoo.co.uk> (https://lab4jf.in)",
   "license": "MIT",
   "bugs": {
