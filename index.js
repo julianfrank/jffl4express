@@ -2,6 +2,7 @@
 
 const fs = require('fs')
 const inspect = require('util').inspect
+const path = require('path')
 
 /*Generic function to read file within express engine declaration...currently planned to be used only for HTML
 Add this into express using this statement =>
@@ -18,7 +19,10 @@ In your app render using the following command inside the middleware
 This sample gets called when any '.jffl' file is rendered Parameters are called directly by express, so no coding needed*/
 
 exports.loadjffl = (filePath, options, callback) => {//std pattern used by / provided by express
-    const params = "{ FilePath: " + filePath + ", Options: " + inspect(options) + " }"//Logging purpose only
+    const params = "{ FilePath: " + filePath + ", Options: " + inspect(options) + ", LocalDir " + path.dirname(filePath) + " }"//Logging purpose only
+    console.info("Going to use Parameters as below:\n" + params)
+    const localPath = path.dirname(filePath)
+
     let parsedOptions = {},//Holder for Parsed Options
         returnHTML = "",//Holder for final HTML document being constucted,
         config = {},//Holder for configuration loaded from jffl file
@@ -42,7 +46,7 @@ exports.loadjffl = (filePath, options, callback) => {//std pattern used by / pro
         }
     })
 
-    //Read the File provided
+    //Read the jffl File provided
     fs.readFile(filePath, (err, content) => {
         if (err) {
             return callback(new Error(err.message))
@@ -50,11 +54,14 @@ exports.loadjffl = (filePath, options, callback) => {//std pattern used by / pro
             config = JSON.parse(content.toString())
 
             function loadFiles(filesArray) {
-                console.log('Going to read Array ->' + filesArray)
+                console.info('Going to read Array ->' + filesArray)
                 return new Promise((resolve, reject) => {
                     let readText = ""
                     Object.keys(filesArray).map((val, ind) => {
-                        fs.readFile(filesArray[val], (err, content) => {
+
+                        let fullPath = path.format({ dir: localPath, base: filesArray[val] })
+                        console.info('Going to read File ->' + fullPath)
+                        fs.readFile(fullPath, (err, content) => {
                             if (err) {
                                 console.error('Error Reading File ' + filesArray[val] + ' Error: ' + err)
                                 reject(err)
@@ -63,6 +70,7 @@ exports.loadjffl = (filePath, options, callback) => {//std pattern used by / pro
                                 if (ind === (filesArray.length - 1)) { resolve(readText) }
                             }
                         })
+
                     })
                 })
             }
