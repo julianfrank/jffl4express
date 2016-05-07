@@ -19,7 +19,6 @@
     "LICENSE",
     "Readme.md",
     "index.js",
-    "lib/",
     "testjffl/"
   ],
   "main": "index.js",

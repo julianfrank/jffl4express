@@ -8,8 +8,8 @@ const path = require('path')
 Add this into express using this statement =>
         'use strict'
         const app=require('express')()
-        const loadJFFL=require('./jffl.js').loadjffl
-        app.set('views', './')
+        const loadJFFL=require('jffl4express').loadjffl
+        app.set('views', '<./jfflview folder>')
         app.set('view engine', 'jffl')
         app.engine('jffl', loadJFFL)
 
