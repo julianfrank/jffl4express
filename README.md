@@ -15,7 +15,7 @@ inside your code
 ```
 'use strict'                                        //Just asking the engine to be strict...Needed for ES6 Complaince
 const app = require('express')()                    //Load  Express into app
-const loadJFFL = require('jffl').loadjffl           //Load the jffl engine
+const loadJFFL = require('jffl4express').loadjffl           //Load the jffl engine
 app.set('views', '<jffl View Directory')            //Tell Express to use the provided directory for asset loading
 app.set('view engine', 'jffl')                      //Tell Express that jffl is a view Engine
 app.engine('jffl', loadJFFL)                        //Tell Express to use the loadJFFL engine wheever jffl files are to be rendered
