@@ -59,21 +59,26 @@ exports.loadjffl = (filePath, options, callback) => {//std pattern used by / pro
                 //console.info('Going to read Array ->' + filesArray)
                 return new Promise((resolve, reject) => {
                     let readText = ""
-                    Object.keys(filesArray).map((val, ind) => {
+                    if (filesArray) {
+                        Object.keys(filesArray).map((val, ind) => {
 
-                        let fullPath = path.format({ dir: localPath, base: filesArray[val] })
-                        //console.info('Going to read File ->' + fullPath)
-                        fs.readFile(fullPath, (err, content) => {
-                            if (err) {
-                                console.error('Error Reading File ' + filesArray[val] + ' Error: ' + err)
-                                reject(err)
-                            } else {
-                                readText += content.toString()
-                                if (ind === (filesArray.length - 1)) { resolve(readText) }
-                            }
+                            let fullPath = path.format({ dir: localPath, base: filesArray[val] })
+                            //console.info('Going to read File ->' + fullPath)
+                            fs.readFile(fullPath, (err, content) => {
+                                if (err) {
+                                    console.error('Error Reading File ' + filesArray[val] + ' Error: ' + err)
+                                    reject(err)
+                                } else {
+                                    readText += content.toString()
+                                    if (ind === (filesArray.length - 1)) { resolve(readText) }
+                                }
+                            })
+
                         })
+                    } else {
+                        resolve(readText)
+                    }
 
-                    })
                 })
             }
 
@@ -92,6 +97,7 @@ exports.loadjffl = (filePath, options, callback) => {//std pattern used by / pro
                     loadFiles(config.html.head)
                         .then((filesText) => {
                             loadFiles(config.js)
+
                                 .then((jsText) => {
                                     if (runParams) {
                                         headText = headText + runParams + jsText
@@ -99,6 +105,7 @@ exports.loadjffl = (filePath, options, callback) => {//std pattern used by / pro
                                         headText += jsText
                                     }
                                     loadFiles(config.css)
+
                                         .then((cssText) => {
                                             headText = headText
                                                 + '<style>' + cssText + '</style>'
@@ -106,8 +113,11 @@ exports.loadjffl = (filePath, options, callback) => {//std pattern used by / pro
                                                 + '</HEAD>'
                                             resolve(headText)
                                         }, (err) => { reject(headText += err) })
+
                                 }, (err) => { reject(headText += err) })
+
                         }, (err) => { reject(headText += '</HEAD>') })
+
                 } else {
                     reject(headText += '</HEAD>')
                 }
